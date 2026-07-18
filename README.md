@@ -25,6 +25,60 @@ The application is structured into distinct infrastructure tiers, ensuring separ
 
 ---
 
+## Repository Structure and Component Breakdown
+
+```text
+finance-engine/
+├── backend/
+│   ├── server.js
+│   ├── package.json
+│   └── Dockerfile
+└── k8s/
+    ├── secret.yaml
+    ├── configmap.yaml
+    ├── storage.yaml
+    ├── database.yaml
+    └── backend.yaml
+```
+
+## Application Compute Tier (`backend/`)
+
+### `server.js`
+
+Houses the main stateless Node.js Express backend processing engine responsible for ingesting transaction payloads, writing validated data records, and managing connection pooling. It features dedicated endpoint mappings to expose internal hardware metrics to the cluster control plane for automated health monitoring.
+
+### `package.json`
+
+The core application configuration manifest defining strict dependency version bounds, operational requirements, and runtime entry-point scripts utilized by the build engine.
+
+### `Dockerfile`
+
+A optimized multi-stage build configuration engineered to reduce the application infrastructure attack surface. It isolates development tools within an initial layer, ensuring the final runtime image contains only minimal production assets, drops root execution privileges, and utilizes compressed base layers to shrink memory allocation footprints.
+
+## Declarative Orchestration Tier (`k8s/`)
+
+### `secret.yaml`
+
+Provides secure cryptographic credential storage holding the administrative user verification parameters. It obfuscates root authentication keys away from plain-text storage manifests and keeps sensitive security details detached from standard application repositories.
+
+### `configmap.yaml`
+
+Serves as the central registry decoupling standard network environment details, mapping stable host connection keys and port parameters out of the application code memory loop to streamline environmental configuration shifts.
+
+### `storage.yaml`
+
+Declares the explicit PersistentVolume resources and PersistentVolumeClaim blueprints needed to intercept physical host memory pathways, creating a durable cluster storage layer that completely decouples ledger records from node system lifecycles.
+
+### `database.yaml`
+
+An advanced data architecture manifest launching a StatefulSet engine alongside an abstract communication network. It enforces a unique alphanumeric node identity pattern, coordinates structural persistence attachments, and establishes a stable network endpoint for microservices communication.
+
+### `backend.yaml`
+
+The main computing management blueprint configuring structural deployment targets, replica configurations, metric monitoring intervals, and dynamic liveness and readiness probes to enable smooth, zero-downtime rolling updates.
+
+---
+
 ## Core Engineering Focus Areas
 
 ### 1. Security and Configuration Segregation
