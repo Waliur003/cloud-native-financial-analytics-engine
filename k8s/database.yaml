@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo-db
+spec:
+  serviceName: "mongo-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-layer
+  template:
+    metadata:
+      labels:
+        app: db-layer
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:6.0
+          ports:
+            - containerPort: 27017
+          envFrom:
+            - secretRef:
+                name: finance-db-secret
+          volumeMounts:
+            - name: storage-hook
+              mountPath: /data/db
+      volumes:
+        - name: storage-hook
+          persistentVolumeClaim:
+            claimName: finance-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  ports:
+    - port: 27017
+  selector:
+    app: db-layer
