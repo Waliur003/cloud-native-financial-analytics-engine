@@ -1,4 +1,4 @@
-### Kubernetes Project 1: Cloud-Native Financial Analytics Engine
+# Kubernetes Project 1: Cloud-Native Financial Analytics Engine
 
 
 ## Project Overview
